@@ -1,12 +1,22 @@
-import { useReducer } from 'react'
+import React, { useReducer } from 'react'
+import MealsModel from '../model/meal'
 import CartContext from './cart-context'
 
-const defaultCartState = {
-    items: [],
+type cart={ items:MealsModel[],
+    totalAmount: number}
+
+const defaultCartState:cart = {
+    items:[],
     totalAmount: 0
 }
+type Action =
+ | { type: 'ADD', results:{ item:MealsModel,
+    totalAmount: number} }
+ | { type: 'REMOVE', results:{ item:MealsModel,
+    totalAmount: number}  }
+ 
 
-const cartReducer = (state, action) => {
+const cartReducer = (state: cart, action: Action) => {
 
     if(action.type === 'ADD') {
        let updatedItems
@@ -57,19 +67,25 @@ const cartReducer = (state, action) => {
     return defaultCartState
 }
 
-const CartProvider = props => {
+const CartProvider: React.FC = props => {
 
     const [cartState, dispatchCartActions] = useReducer(cartReducer, defaultCartState)
 
-const addItemToCartHandler = (item) => {
+const addItemToCartHandler = (item: MealsModel) => {
     dispatchCartActions({type: 'ADD', item: item})
 }
 
-const removeItemFromCartHandler = (id) => {
+const removeItemFromCartHandler = (id: String) => {
     dispatchCartActions({type: 'REMOVE', id: id})
 } 
 
-const cartContext = {
+const cartContext:{
+    items: MealsModel[];
+    totalAmount: number;
+    addItem: (item: MealsModel) => void;
+    removeItem: (id: string) => void
+
+} = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,

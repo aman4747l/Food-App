@@ -2,14 +2,14 @@ import { useContext } from 'react'
 import CartContext from '../../store/cart-context'
 import classes from './MealsItem.module.css'
 import MealsItemForm from './MealsItemForm'
-const MealsItem = props => {
+const MealsItem: React.FC<{id: string; name: string; price: number; description: string;}> = props => {
     const cartCtx = useContext(CartContext)
     
-    const addToCartHandler = amount => {
+    const addToCartHandler = () => {
         cartCtx.addItem({
             id: props.id,
             name: props.name,
-            amount: amount,
+            description: props.description,
             price: props.price
         })
     }
