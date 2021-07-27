@@ -4,23 +4,22 @@ import CartContext from './cart-context'
 
 type cart={ items:MealsModel[],
     totalAmount: number}
+    
 
 const defaultCartState:cart = {
     items:[],
     totalAmount: 0
 }
 type Action =
- | { type: 'ADD', results:{ item:MealsModel,
-    totalAmount: number} }
- | { type: 'REMOVE', results:{ item:MealsModel,
-    totalAmount: number}  }
+ | {type: 'ADD', item: MealsModel }
+ | { type: 'REMOVE', id: string}  
  
 
 const cartReducer = (state: cart, action: Action) => {
 
     if(action.type === 'ADD') {
-       let updatedItems
-       let updatedItem 
+       let updatedItems : MealsModel[]
+       let updatedItem : MealsModel
         const updatedTotalAmount = state.totalAmount + action.item.price
         const existingCartItemIndex = state.items.findIndex(item => item.id === action.item.id)
         const existingCartItem = state.items[existingCartItemIndex]
@@ -28,7 +27,7 @@ const cartReducer = (state: cart, action: Action) => {
         {
              updatedItem = {
                 ...existingCartItem,
-                amount: existingCartItem.amount + 1
+                
             }
             updatedItems = state.items
             updatedItems[existingCartItemIndex]=updatedItem
@@ -43,22 +42,18 @@ const cartReducer = (state: cart, action: Action) => {
         }
     }
     if(action.type === 'REMOVE') {
-        let updatedItems
-        let updatedItem
+        let updatedItems: MealsModel[]
+        let updatedItem: MealsModel
         let updatedTotalAmount
         const existingCartItemIndex = state.items.findIndex(item => item.id === action.id)
         const existingCartItem = state.items[existingCartItemIndex]
         updatedTotalAmount = state.totalAmount - existingCartItem.price
-        if(existingCartItem.amount === 1){
-            updatedItems = state.items.filter(item => item.id !== action.id)
-            
-        }
-        else {
-            updatedItem = {...existingCartItem, amount: existingCartItem.amount -1 }
+   
+            updatedItem = {...existingCartItem}
             updatedItems = [...state.items]
             updatedItems[existingCartItemIndex] = updatedItem
             
-        }
+        
         return {
             items: updatedItems,
             totalAmount: updatedTotalAmount
@@ -75,7 +70,7 @@ const addItemToCartHandler = (item: MealsModel) => {
     dispatchCartActions({type: 'ADD', item: item})
 }
 
-const removeItemFromCartHandler = (id: String) => {
+const removeItemFromCartHandler = (id: string) => {
     dispatchCartActions({type: 'REMOVE', id: id})
 } 
 
