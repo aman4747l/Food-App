@@ -1,7 +1,7 @@
 import classes from './Checkout.module.css'
-const Checkout = props => {
+const Checkout:React.FC<{onCancel: () => void}> = props => {
 
-   const submitHandler = (event) => {
+   const submitHandler = (event:React.FormEvent) => {
       event.preventDefault()
    }
 

@@ -1,19 +1,20 @@
 import { useContext, useState } from "react";
+import MealsModel from "../model/meal";
 import CartContext from "../store/cart-context";
 import Modal from "../UI/Modal";
 import classes from "./Cart.module.css";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
 
-const Cart = (props) => {
+const Cart:React.FC<{onClose: () => void }> = (props) => {
   const [hasOrder, setHasOrder] = useState(false);
   const cartCtx = useContext(CartContext);
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
   let hasItems = cartCtx.items.length > 0;
-  const onItemRemoveHandler = (id) => {
+  const onItemRemoveHandler = (id: string) => {
       cartCtx.removeItem(id)
   };
-  const onItemAddHandler = (item) => {
+  const onItemAddHandler = (item: MealsModel) => {
       cartCtx.addItem(item)
   };
   const orderHandler = () => {
@@ -28,7 +29,6 @@ const Cart = (props) => {
           key={item.id}
           name={item.name}
           price={item.price}
-          amount={item.amount}
           onRemove={onItemRemoveHandler.bind(null, item.id)}
           onAdd={onItemAddHandler.bind(null, item)}
         />
